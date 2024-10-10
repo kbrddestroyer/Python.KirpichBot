@@ -1,0 +1,9 @@
+[project]
+name = "Papix Discord Bot"
+version = "1.0.0"
+description = "Just a discord bot for kirpich:squad"
+
+[tool.pytest.ini_options]
+pythonpath = [
+	".", "./src/"
+]

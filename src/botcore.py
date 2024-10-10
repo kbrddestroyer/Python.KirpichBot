@@ -3,7 +3,7 @@ import discord
 
 from discord import app_commands
 from commands import BotCommandRegistry
-from tools import tools
+from tools import tools, configuring
 
 
 class BotCore:
@@ -39,6 +39,7 @@ def initialize():
 
     bot = BotCore()
     tools.initialize()
+    configuring.initialize()
     bot.run()
 
 

@@ -4,6 +4,7 @@ from typing import Optional
 
 from discord import app_commands
 from commands import BotCommand
+from tools.configuring import get_instance as config, ConfigKeys
 
 
 class BotTools:
@@ -27,6 +28,14 @@ class BotTools:
         )
 
     async def ping(self, interaction: discord.Interaction):
+        config_instance = config()
+        assert config_instance
+        role = config_instance.as_role(ConfigKeys.ADMIN_ROLE, interaction)
+        assert role
+        print(role.name)
+        if isinstance(interaction.user, discord.Member):
+            if role not in interaction.user.roles:
+                return
         await interaction.response.send_message('Pong!')
 
     @app_commands.describe(name='Name of the role')
@@ -47,6 +56,12 @@ class BotTools:
         ):
         if not interaction.guild:
             await interaction.response.send_message('Trying to create channel while not in guild.')
+            return
+        if not isinstance(interaction.user, discord.Member):
+            await interaction.response.send_message('Not a member')
+            return
+        if not config() or config().as_role(ConfigKeys.ADMIN_ROLE, interaction) not in interaction.user.roles:
+            await interaction.response.send_message('Not an admin')
             return
         if access_role == interaction.guild.default_role:
             await interaction.response.send_message('Cannot create closed channel with everyone as access_role')
