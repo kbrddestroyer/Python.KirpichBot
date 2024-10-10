@@ -12,7 +12,7 @@ class BotCommand:
     description: Optional[str]
 
     @staticmethod
-    def create(func: Callable, name: str, description: Optional[str]=None):
+    def create(func: Callable, name: str, description: Optional[str] = None):
         global g_registry
         command = BotCommand(func, name, description)
         g_registry.register_command(command)
@@ -28,10 +28,10 @@ class BotCommandRegistry:
         @self.bot.event
         async def on_ready():
             for command in self.__commands:
-                print(f'[DEBUG] Registering {command.name}')
+                print(f"[DEBUG] Registering {command.name}")
                 self.__add_command(command)
-            
-            print('[DEBUG] Finish!')
+
+            print("[DEBUG] Finish!")
             await self.tree.sync()
 
         g_registry = self
@@ -51,4 +51,3 @@ class BotCommandRegistry:
     def register_range(self, commands: List[BotCommand]):
         for command in commands:
             self.register_command(command)
-

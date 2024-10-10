@@ -34,8 +34,12 @@ class BotConfiguring:
 
     def __load_config(self) -> Dict:
         data = {}
-        with open(BotConfiguring.CONFIG_PATH, 'r') as f:
-            data = json.load(f)
+        try:
+            with open(BotConfiguring.CONFIG_PATH, 'r') as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            print('[ERROR] FileNotFoundError: couldn\'t open config file')
+            return {}
         print(f'[DEBUG] Opened {BotConfiguring.CONFIG_PATH} and read the contents {data}')
         return data
 
@@ -53,7 +57,6 @@ class BotConfiguring:
         except IndexError:
             return None
         assert interaction.guild
-        print(role_id)
         return interaction.guild.get_role(int(role_id))
 
     @app_commands.describe(key='Config key')

@@ -10,12 +10,6 @@ from tools.configuring import get_instance as config, ConfigKeys
 class BotTools:
     def __init__(self) -> None:
         BotCommand.create(
-            self.ping,
-            'ping',
-            'indev command'
-        )        
-        
-        BotCommand.create(
             self.create_role, 
             'create_role',
             'Creates new role'
@@ -26,17 +20,6 @@ class BotTools:
             'create_channel',
             'creates channel'
         )
-
-    async def ping(self, interaction: discord.Interaction):
-        config_instance = config()
-        assert config_instance
-        role = config_instance.as_role(ConfigKeys.ADMIN_ROLE, interaction)
-        assert role
-        print(role.name)
-        if isinstance(interaction.user, discord.Member):
-            if role not in interaction.user.roles:
-                return
-        await interaction.response.send_message('Pong!')
 
     @app_commands.describe(name='Name of the role')
     async def create_role(self, interaction: discord.Interaction, name: str):
@@ -60,15 +43,18 @@ class BotTools:
         if not isinstance(interaction.user, discord.Member):
             await interaction.response.send_message('Not a member')
             return
-        if not config() or config().as_role(ConfigKeys.ADMIN_ROLE, interaction) not in interaction.user.roles:
-            await interaction.response.send_message('Not an admin')
-            return
+        g_config = config()
+        if g_config:  
+            required_role = g_config.as_role(ConfigKeys.ADMIN_ROLE, interaction)
+            if required_role and required_role not in interaction.user.roles:
+                await interaction.response.send_message('You have no permissions to perform this action')
+                return
         if access_role == interaction.guild.default_role:
             await interaction.response.send_message('Cannot create closed channel with everyone as access_role')
             return
         if access_role and isinstance(interaction.user, discord.Member) and access_role not in interaction.user.roles:
             await interaction.response.send_message('Cannot create closed channel: access_role not assigned to you')
-            return
+            returni
 
         overwrites = {}
         
