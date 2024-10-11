@@ -1,3 +1,4 @@
+import os
 import json
 import discord
 
@@ -12,7 +13,7 @@ class ConfigKeys(discord.Enum):
 
 
 class BotConfiguring:
-    CONFIG_PATH = './config/botconfig.json'
+    CONFIG_PATH = 'config/botconfig.json'
 
     def __init__(self) -> None:
         self.__data: Dict = self.__load_config()
@@ -34,8 +35,11 @@ class BotConfiguring:
 
     def __load_config(self) -> Dict:
         data = {}
+        configpath = os.getenv('CONFIGPATH')
+        if not configpath:
+            configpath = './'
         try:
-            with open(BotConfiguring.CONFIG_PATH, 'r') as f:
+            with open(configpath + BotConfiguring.CONFIG_PATH, 'r') as f:
                 data = json.load(f)
         except FileNotFoundError:
             print('[ERROR] FileNotFoundError: couldn\'t open config file')
