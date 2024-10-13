@@ -1,2 +1,8 @@
-# Python.PapixBot
-Just my own developer multi tool for dev::playground Discord server
+# Python.KirpichBot
+
+Functional bot for [Kirpich:Squad](https://discord.gg/qRsX5qHJUG) Discord server
+
+- Administration
+- Faster section and channel creation
+- Community functions
+- Economy
