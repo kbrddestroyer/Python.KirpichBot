@@ -1,6 +1,6 @@
 export CONFIGPATH="./src/"
 
-if [[ -z "${{ TOKEN }} ]]; then
+if [[ -z "${{ TOKEN }}" ]]; then
  echo Am I deployed?
  touch ./src/botconfig.ini
  echo [BOT] >> ./src/botconfig.ini
